@@ -33,7 +33,7 @@ class CompanyController extends Controller
 
         return ResponseFormatter::success(
             $companies->paginate($limit),
-            'Companies Not Found'
+            'Companies Found'
         );
     }
 }
