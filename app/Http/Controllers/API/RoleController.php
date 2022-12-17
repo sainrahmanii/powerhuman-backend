@@ -16,29 +16,36 @@ class RoleController extends Controller
     {
         $id = $request->input('id');
         $name = $request->input('name');
-        $limit= $request->input('limit', 10);
+        $limit = $request->input('limit', 10);
+        $with_responsibilities = $request->input('with_responsibilities', false);
 
         $roleQuery = Role::query();
 
+        // Get single data
         if ($id) {
-            $role = $roleQuery->find($id);
+            $role = $roleQuery->with('responsibilities')->find($id);
 
             if ($role) {
-                return ResponseFormatter::success($role, 'Role Berhasil Ditemukan');
+                return ResponseFormatter::success($role, 'Role found');
             }
 
-            return ResponseFormatter::error('Role Not Found', 404);
+            return ResponseFormatter::error('Role not found', 404);
         }
 
+        // Get multiple data
         $roles = $roleQuery->where('company_id', $request->company_id);
 
         if ($name) {
             $roles->where('name', 'like', '%' . $name . '%');
         }
 
+        if ($with_responsibilities) {
+            $roles->with('responsibilities');
+        }
+
         return ResponseFormatter::success(
             $roles->paginate($limit),
-            'Role Found'
+            'Roles found'
         );
     }
 

@@ -27,7 +27,7 @@ class Role extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function responsibilites()
+    public function responsibilities()
     {
         return $this->hasMany(Responsibility::class);
     }
